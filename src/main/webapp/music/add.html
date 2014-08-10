@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>每天都听音乐吗?可否分享给他人...</title>
+        <link rel="shortcut icon" href="../favicon.ico">
+        <link rel="stylesheet" href="/plugins/trumbowyg/design/css/trumbowyg.css">
+        <style type="text/css">
+            html, body {
+                margin: 0;
+                padding: 0;
+                background-color: #fff;
+                font-family: 'Lato', Calibri, Arial, sans-serif;
+                color: #7F8887;
+            }
+            header {
+                margin-top:50px;
+                text-align: center;
+            }
+            #main {
+                max-width: 960px;
+                margin: 0 auto;
+            }
+
+            .progress-button{
+            width: 120px;
+            height: 45px;
+            border: 1px solid #1ECD97;
+            margin-left:18px;
+            margin-top:20px;
+            background: transparent;
+            color: #1ECD97;
+            letter-spacing: 1px;
+            font-size: 18px;
+            font-family: 'Montserrat', sans-serif;
+
+            }
+
+            .progress-input{
+            display: block;
+            margin: 0 auto;
+            padding: 0;
+            width: 90%;
+            height: 45px;
+            padding-left:5px;
+            border: 1px solid #7F8887;
+            margin-left:18px;
+            background: transparent;
+            color: #79817F;
+            letter-spacing: 1px;
+            font-size: 18px;
+            font-family: 'Montserrat', sans-serif;
+            }
+
+            .progress-button:hover {
+            background-color: #1ECD97;
+            color: #fff;
+            cursor:pointer;
+            }
+
+            .progress-input:focus {
+            outline: none;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="main" role="main">
+            <header>
+                <!--<h1>何不趁年轻多奋斗呢？</h1>-->
+                <!--<p>-->
+                    <!--Close an editor on clic on "Close" in top right corner. <br>-->
+                    <!--To reopen an editor, double-click on his text.-->
+                <!--</p>-->
+            </header>
+
+            <form action="/music/save" method="post">
+                <input type="text" name="title" id="title" class="progress-input" placeholder="歌曲名"/>
+                <textarea id="form-content" class="editor" name="content" cols="30" rows="10">歌词 / 故事 / 感悟
+                </textarea>
+                <input type="text" name="url" id="url" class="progress-input" placeholder="音乐URL"/>
+                <span style="margin-left:18px;">Example : [ http://www.xiami.com/widget/0_45808/singlePlayer.swf ]  <a target="_blank" href="http://www.xiami.com">To 虾米音乐</a></span><br/>
+                <input type="submit" value="ADD"  class="progress-button"/>
+            </form>
+        </div>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/plugins/trumbowyg/trumbowyg.js"></script>
+        <script src="/plugins/trumbowyg/langs/fr.js"></script>
+        <script src="/plugins/trumbowyg/plugins/upload/trumbowyg.upload.js"></script>
+        <script src="/plugins/trumbowyg/plugins/base64/trumbowyg.base64.js"></script>
+        <script>
+            /********************************************************
+             * Customized button pane + buttons groups + dropdowns
+             * Use upload plugin
+             *******************************************************/
+
+            /*
+             * Add your own groups of button
+             */
+            $.trumbowyg.btnsGrps.test = ['bold', 'link'];
+
+            /* Add new words for customs btnsDef just below */
+            $.extend(true, $.trumbowyg.langs, {
+                fr: {
+                    align: 'Alignement',
+                    image: 'Image'
+                }
+            });
+
+            /** Simple customization with current options **/
+            $('#form-content').trumbowyg({
+                lang: 'fr',
+                closable: false,
+                mobile: true,
+                fixedBtnPane: true,
+                fixedFullWidth: true,
+                semantic: true,
+                resetCss: true,
+                autoAjustHeight: true,
+                autogrow: true
+            });
+
+            $('.editor').on('dblclick', function(e){
+                $(this).trumbowyg({
+                    lang: 'fr',
+                    closable: true,
+                    fixedBtnPane: true
+                });
+            });
+        </script>
+    </body>
+</html>
