@@ -44,6 +44,8 @@ public class MusicController extends Controller {
         String keyword = getPara("keyword");
         try {
             List<LuceneBean> list = LuceneUtil.search(keyword);
+            System.out.println("=============搜索结果:"+list.size());
+            System.out.printf("==============keyword:"+keyword);
             setAttr("lb", list);
         } catch (IOException e) {
             e.printStackTrace();

@@ -83,6 +83,6 @@ public class Config extends JFinalConfig {
     }
 
     public static void main(String[] args) throws Exception {
-        JFinal.start("/Users/longjianlin/Documents/longjl-work/ailaosao/src/main/webapp", 8080, "/", 5);
+        JFinal.start("/Users/longjianlin/Documents/longjl-work/ailaosao/src/main/webapp", 8088, "/", 5);
     }
 }
