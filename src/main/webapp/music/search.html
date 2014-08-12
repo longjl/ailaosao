@@ -4,11 +4,12 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>要懂得享受生活</title>
-    <meta name="description" content="每天都要进步一点"/>
-    <meta name="keywords" content="爱无处不在"/>
-    <meta name="author" content="Codrops"/>
-    <link rel="shortcut icon" href="../favicon.ico">
+    <title>爱牢骚 音乐灵魂 www.ailaosao.com</title>
+    <meta name="description"
+          content="音乐的精髓是灵魂,灵魂的用音乐,永远的www.ailaosao.com"/>
+    <meta name="keywords" content="爱牢骚 自定义音乐 音乐的灵魂 爱的力量 www.ailaosao.com"/>
+    <meta name="author" content="longjianlin"/>
+    <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/plugins/na/css/default.css"/>
     <link rel="stylesheet" type="text/css" href="/plugins/na/css/component.css"/>
     <script src="/plugins/na/js/modernizr.custom.js"></script>
@@ -29,7 +30,7 @@
         width: 500px;
         height: 45px;
         padding-left:5px;
-        border: 1px solid #1ECD97;
+        border: 1px solid #2c3e50;
         background: transparent;
         color: #79817F;
         letter-spacing: 1px;
@@ -53,13 +54,12 @@
 <div class="container">
     <header class="clearfix">
         <!--<span>www.ailaosao.com</span>-->
-        <h1><a target="_blank" href="/">Logo</a></h1>
-        <h1 style="margin-left:20px"><a href="/music">Music</a></h1>
-        <h1 style="margin-left:20px"><a target="_blank" href="/music/add">ADD</a></h1>
+        <h1 style="margin-left:20px"><a href="/">MUSIC</a></h1>
+
+        <h1 style="margin-left:20px"><a href="/music/add">ADD</a></h1>
         <nav>
-            <form class="newsletter" action="/music/search" onsubmit="return isNull()" method="get">
+            <form class="newsletter" action="/search" onsubmit="return isNull()" method="get">
                 <input type="text" value="" name="keyword" id="keyword" class="progress-input" placeholder="音乐给的快乐"/>
-                <input type="submit" value="乐一下" class="progress-button"/>
             </form>
         </nav>
     </header>
@@ -67,20 +67,8 @@
     <div class="main">
         <ul id="cbp-ntaccordion" class="cbp-ntaccordion">
             <#list lb as bean>
-                <li>
+                <li onclick="music('${bean.id}')">
                     <h3 class="cbp-nttrigger">${bean.title}</h3>
-
-                    <div class="cbp-ntcontent">
-                        <#if bean.url??>
-                            <p>
-                                <embed src="${bean.url}"
-                                       type="application/x-shockwave-flash" width="257" height="33"
-                                       wmode="transparent"></embed>
-                            </p>
-                        </#if>
-                        <p>${bean.content}</p>
-                        <p><a href="/music/edit/${bean.id}">EDIT</a></p>
-                    </div>
                 </li>
             </#list>
         </ul>
@@ -109,7 +97,11 @@
                 }
                return true;
 			}
-</script>
 
+			function music(id){
+                    window.location.href="/music/"+id;
+            }
+
+</script>
 </body>
 </html>

@@ -20,7 +20,7 @@ public class Music extends Model<Music> {
      * @return
      */
     public List<Music> getMusics(){
-        return dao.find("select m.id,m.title,m.content,m.url,m.create_at from music m order by m.create_at desc");
+        return dao.find("select m.id,m.title,m.singer,m.url,m.create_at from music m order by m.create_at desc");
     }
 
     /**
@@ -29,6 +29,6 @@ public class Music extends Model<Music> {
      * @return
      */
     public Music getMusic(long id){
-        return dao.findFirst("select m.id,m.title,m.content,m.url,m.create_at from music m where m.id =?",id);
+        return dao.findFirst("select m.id,m.title,m.singer,m.content,m.url,m.create_at from music m where m.id =?",id);
     }
 }

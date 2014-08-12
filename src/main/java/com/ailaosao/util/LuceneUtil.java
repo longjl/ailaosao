@@ -81,6 +81,7 @@ public class LuceneUtil {
                  */
                 doc.add(new Field("id", String.valueOf(lb.getId()), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 doc.add(new Field("title", lb.getTitle(), Field.Store.YES, Field.Index.ANALYZED));
+                doc.add(new Field("singer", lb.getContent(), Field.Store.YES, Field.Index.ANALYZED));
                 doc.add(new Field("content", lb.getContent(), Field.Store.YES, Field.Index.ANALYZED));
                 doc.add(new Field("url", lb.getUrl(), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 iwriter.addDocument(doc);
@@ -130,6 +131,7 @@ public class LuceneUtil {
                  */
             doc.add(new Field("id", String.valueOf(lb.getId()), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.add(new Field("title", lb.getTitle(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.add(new Field("singer", lb.getContent(), Field.Store.YES, Field.Index.ANALYZED));
             doc.add(new Field("content", lb.getContent(), Field.Store.YES, Field.Index.ANALYZED));
             doc.add(new Field("url", lb.getUrl(), Field.Store.YES, Field.Index.ANALYZED));
             iwriter.addDocument(doc);
@@ -171,6 +173,7 @@ public class LuceneUtil {
                  */
             doc.add(new Field("id", String.valueOf(lb.getId()), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.add(new Field("title", lb.getTitle(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.add(new Field("singer", lb.getContent(), Field.Store.YES, Field.Index.ANALYZED));
             doc.add(new Field("content", lb.getContent(), Field.Store.YES, Field.Index.ANALYZED));
             doc.add(new Field("url", lb.getUrl(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             Term term = new Term("id", String.valueOf(lb.getId()));
@@ -189,51 +192,48 @@ public class LuceneUtil {
      * @param keyword
      * @return
      */
-    public static List<LuceneBean> search(String keyword) throws IOException {
+    public static List<LuceneBean> search(String keyword) throws IOException, ParseException {
         List<LuceneBean> list = new ArrayList<LuceneBean>();
         File file = new File(lucenePath);//存放索引路径
         LuceneBean bean = null;
-        try {
-            if (directory == null) {
-                directory = FSDirectory.open(file);//将索引存放在本地
-            }
-            ireader = IndexReader.open(directory);
-            isearcher = new IndexSearcher(ireader);
 
-            String[] queries = {keyword, keyword};
-            String[] fields = {"title", "content"};
-
-            BooleanClause.Occur[] flags = {BooleanClause.Occur.SHOULD, BooleanClause.Occur.SHOULD};
-
-            if (analyzer == null)
-                analyzer = new IKAnalyzer();
-
-            Query query = MultiFieldQueryParser.parse(Version.LUCENE_4_9, queries, fields, analyzer);
-
-            TopDocs topDocs = isearcher.search(query, 55);
-            ScoreDoc[] scoreDocs = topDocs.scoreDocs;
-
-            int count = topDocs.totalHits;//命中数
-            if (count > 50) count = 50;
-
-            for (int i = 0; i < count; i++) {
-                Document doc = isearcher.doc(scoreDocs[i].doc);
-                bean = new LuceneBean();
-                bean.setId(Long.parseLong(doc.get("id")));
-                bean.setTitle(doc.get("title"));
-                bean.setContent(doc.get("content"));
-                bean.setUrl(doc.get("url"));
-                list.add(bean);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } finally {
-            if (ireader != null) {
-                ireader.close();
-            }
+        if (directory == null) {
+            directory = FSDirectory.open(file);//将索引存放在本地
         }
+        ireader = IndexReader.open(directory);
+        isearcher = new IndexSearcher(ireader);
+
+        String[] queries = {keyword, keyword, keyword};
+        String[] fields = {"title", "singer", "content"};
+
+        BooleanClause.Occur[] flags = {BooleanClause.Occur.SHOULD, BooleanClause.Occur.SHOULD};
+
+        if (analyzer == null)
+            analyzer = new IKAnalyzer();
+
+        Query query = MultiFieldQueryParser.parse(Version.LUCENE_4_9, queries, fields, analyzer);
+
+        TopDocs topDocs = isearcher.search(query, 55);
+        ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+
+        int count = topDocs.totalHits;//命中数
+        if (count > 50) count = 50;
+
+        for (int i = 0; i < count; i++) {
+            Document doc = isearcher.doc(scoreDocs[i].doc);
+            bean = new LuceneBean();
+            bean.setId(Long.parseLong(doc.get("id")));
+            bean.setTitle(doc.get("title"));
+            bean.setSinger(doc.get("singer"));
+            bean.setContent(doc.get("content"));
+            bean.setUrl(doc.get("url"));
+            list.add(bean);
+        }
+
+        if (ireader != null) {
+            ireader.close();
+        }
+
         return list;
     }
 }

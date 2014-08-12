@@ -12,6 +12,16 @@ public class LuceneBean {
     private String title;//标题
     private String content;//内容
 
+    public String getSinger() {
+        return singer;
+    }
+
+    public void setSinger(String singer) {
+        this.singer = singer;
+    }
+
+    private String singer;//歌手
+
     public String getUrl() {
         return url;
     }

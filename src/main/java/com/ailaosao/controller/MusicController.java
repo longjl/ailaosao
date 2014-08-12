@@ -3,6 +3,7 @@ package com.ailaosao.controller;
 import com.ailaosao.bean.LuceneBean;
 import com.ailaosao.model.Music;
 import com.ailaosao.util.LuceneUtil;
+import com.ailaosao.util.PrintTime;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 
@@ -22,36 +23,23 @@ public class MusicController extends Controller {
     private static Logger logger = Logger.getLogger(MusicController.class);
 
     public void index() {
-        List<Music> musics = Music.dao.getMusics();
-        List<LuceneBean> luceneBeans = new ArrayList<LuceneBean>();
-        LuceneBean lb = null;
-        for (Music m : musics) {
-            lb = new LuceneBean();
-            lb.setId(m.getLong("id"));
-            lb.setTitle(m.getStr("title"));
-            lb.setContent(m.getStr("content"));
-            lb.setUrl(m.getStr("url"));
-            luceneBeans.add(lb);
+        try {
+            long id = getParaToLong(0);
+            Music music = Music.dao.getMusic(id);
+            if (music != null) {
+                music.set("create_at", PrintTime.getNiceDate(music.getDate("create_at").toString()));
+                setAttr("music", music);
+                render("/music/music.html");
+            } else {
+                renderError(404);
+            }
+        } catch (Exception e) {
+            logger.error("no music : " + e.getMessage());
+            renderError(404);
         }
-        setAttr("lb", luceneBeans);
-        render("/music/index.html");
     }
 
-    /**
-     * 搜索
-     */
-    public void search() {
-        String keyword = getPara("keyword");
-        try {
-            List<LuceneBean> list = LuceneUtil.search(keyword);
-            System.out.println("=============搜索结果:"+list.size());
-            System.out.printf("==============keyword:"+keyword);
-            setAttr("lb", list);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        render("/music/index.html");
-    }
+
 
     public void add() {
         render("/music/add.html");
@@ -64,24 +52,25 @@ public class MusicController extends Controller {
         String title = getPara("title");
         String content = getPara("content");
         String url = getPara("url");
-        if ((title != null && title.length() > 0) && (content != null && content.length() > 0)) {
-            Music music = new Music();
-            music.set("title", title);
-            music.set("content", content);
-            music.set("status", 1);//状态: 1-音乐 2-文章 3-电影
-            music.set("url", url);
-            music.set("create_at", new Date());
-            boolean b = music.save();
-            if (b) {
-                LuceneBean bean = new LuceneBean();
-                bean.setId(music.getLong("id"));
-                bean.setTitle(music.getStr("title"));
-                bean.setContent(music.getStr("content"));
-                bean.setUrl(music.getStr("url"));
-                LuceneUtil.createIndex(bean);//创建索引
-            }
+        String singer = getPara("singer");
+        Music music = new Music();
+        music.set("title", title);
+        music.set("singer",singer);
+        music.set("content", content);
+        music.set("status", 1);//状态: 1-音乐 2-文章 3-电影
+        music.set("url", url);
+        music.set("create_at", new Date());
+        boolean b = music.save();
+        if (b) {
+            LuceneBean bean = new LuceneBean();
+            bean.setId(music.getLong("id"));
+            bean.setTitle(music.getStr("title"));
+            bean.setSinger(music.getStr("singer"));
+            bean.setContent(music.getStr("content"));
+            bean.setUrl(music.getStr("url"));
+            LuceneUtil.createIndex(bean);//创建索引
         }
-        redirect("/music");
+        redirect("/");
     }
 
     /**
@@ -106,12 +95,14 @@ public class MusicController extends Controller {
         try {
             long id = getParaToLong("id");
             String title = getPara("title");
+            String singer = getPara("singer");
             String content = getPara("content");
             String url = getPara("url");
 
             Music music = new Music();
             music.set("id", id);
             music.set("title", title);
+            music.set("singer",singer);
             music.set("content", content);
             music.set("url", url);
             boolean b = music.update();
@@ -119,6 +110,7 @@ public class MusicController extends Controller {
                 LuceneBean bean = new LuceneBean();
                 bean.setId(music.getLong("id"));
                 bean.setTitle(music.getStr("title"));
+                bean.setSinger(music.getStr("singer"));
                 bean.setContent(music.getStr("content"));
                 bean.setUrl(music.getStr("url"));
                 LuceneUtil.updateIndex(bean);//更新索引
@@ -126,6 +118,6 @@ public class MusicController extends Controller {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        redirect("/music");
+        redirect("/");
     }
 }

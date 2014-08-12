@@ -51,7 +51,7 @@ h1 span {
 }
 
 .giftbox::after {
-	content: 'Click me';
+	content: 'Gifts';
 	position: absolute;
 	color: #fff;
 	font-family: 'Peralta', serif;
