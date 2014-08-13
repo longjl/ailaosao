@@ -43,11 +43,11 @@
         </ul>
         <div class="bg-img"><img src="/images/8.jpg" alt="Background Image"/></div>
         <div class="title">
-            <h1>${music.title}</h1>
+            <h1>${music.title!}</h1>
 
-            <p class="subline">谢霆锋</p>
+            <p class="subline">${music.singer}</p>
 
-            <p>on <strong>${music.create_at}</strong></p>
+            <p>on <strong>${music.create_at!}</strong></p>
         </div>
     </header>
     <button class="trigger" data-info=""><span>Trigger</span></button>

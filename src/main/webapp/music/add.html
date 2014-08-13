@@ -72,7 +72,7 @@
         <h1>在这里，可以分享您喜欢的音乐.</h1>
     </header>
     <section class="demo-1">
-        <form action="/music/save" method="post">
+        <form action="/music/save" method="post" onsubmit="return isNull();">
             <input type="text" name="title" id="title" class="progress-input" placeholder="歌曲名"/><br/>
             <input type="text" name="singer" id="singer" class="progress-input" placeholder="歌手"/><br/>
             <input type="text" name="url" id="url" class="progress-input" placeholder="音乐URL"/>
@@ -137,5 +137,25 @@
                     fixedBtnPane: true
                 });
             });
+
+
+            function isNull(){
+                var title = $("#title").val();
+                var singer =  $("#singer").val();
+                var url = $("#url").val();
+
+                if(title == ''){
+                    return false;
+                }
+
+                if(singer == ''){
+                    return false;
+                }
+
+                if(url == ''){
+                    return false;
+                }
+                return true;
+            }
         </script>
 </html>
