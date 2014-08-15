@@ -60,6 +60,7 @@ public class MusicController extends Controller {
         music.set("status", 1);//状态: 1-音乐 2-文章 3-电影
         music.set("url", url);
         music.set("create_at", new Date());
+
         boolean b = music.save();
         if (b) {
             LuceneBean bean = new LuceneBean();
